@@ -1,5 +1,5 @@
 ---
-description: 한국 수출입 통계 분석 리포트 생성 워크플로우 (
+description: 한국 수출입 통계 분석 리포트 생성 워크플로우 (korea-trade-report TARGET_TIME=202606)
 ---
 
 # 6월 한국 수출입 통계 분석 리포트 생성 워크플로우
