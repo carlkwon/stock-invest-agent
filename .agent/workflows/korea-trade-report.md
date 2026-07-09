@@ -1,5 +1,5 @@
 ---
-description: 한국 수출입 통계 분석 리포트 생성 워크플로우
+description: 한국 수출입 통계 분석 리포트 생성 워크플로우 (
 ---
 
 # 6월 한국 수출입 통계 분석 리포트 생성 워크플로우
@@ -8,7 +8,7 @@ description: 한국 수출입 통계 분석 리포트 생성 워크플로우
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `{{TARGET_MONTH}}` | 분석 대상 월 | `2026년 6월` |
-| `{{OUTPUT_PATH}}` | 리포트 저장 경로 | `reports/trade_report_2026_06.md` |
+| `{{OUTPUT_PATH}}` | 리포트 저장 경로 | `reports/trade/trade_report_2026_06.md` |
 
 ---
 
