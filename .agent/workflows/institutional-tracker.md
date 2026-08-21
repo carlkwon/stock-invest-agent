@@ -12,7 +12,7 @@ Description: 워런 버핏, 스탠리 드라켄밀러, 조지 소로스 등 글�
 | Variable | Description | Example / Logic |
 |----------|-------------|-----------------|
 | `{{TARGET_QUARTER}}` | 분석 대상 공시 분기 | 현재 시점 기준 가장 최신 공시 분기 (예: `2026 Q1` 또는 `2026 Q2`) |
-| `{{TARGET_INVESTORS}}` | 분석 대상 기관/대가 목록 | `Berkshire Hathaway`, `Fisher Asset Management`, `Duquesne Family Office`, `Bill & Melinda Gates Foundation`, `NPS`, `Soros Fund`, `Founders Fund` 등 |
+| `{{TARGET_INVESTORS}}` | 분석 대상 기관/대가 목록 | `Berkshire Hathaway`, `Fisher Asset Management`, `Duquesne Family Office`, `Bill & Melinda Gates Foundation`, `NPS`, `Soros Fund`, `Founders Fund`, `Situational Awareness LP` 등 |
 | `{{OUTPUT_PATH}}` | 리포트 및 결과 저장 경로 | `reports/13f/13f_analysis_{{TARGET_QUARTER_CODE}}.md` |
 
 ---
@@ -23,7 +23,7 @@ Description: 워런 버핏, 스탠리 드라켄밀러, 조지 소로스 등 글�
    - **Berkshire Hathaway (CIK: 0001067983)** - 워런 버핏 (Warren Buffett)
    - **Fisher Asset Management (CIK: 0000850529)** - 켄 피셔 (Ken Fisher)
    - **Daily Journal Corp / Himalaya Capital (CIK: 0001483017)** - 리 루 (Li Lu)
-   - **Pershing Square Capital Management (CIK: 0001336528)** - 빌 애크먼 (Bill Ackman)
+   - **Pershing Square (CIK: 0002026053, "Pershing Square Inc.")** - 빌 애크먼 (Bill Ackman). ⚠ 2026 Q2(2026-06-30)부터 제출 엔티티가 변경됐다 — 기존 CIK 0001336528("Pershing Square Capital Management, L.P.")은 2026 Q1(2026-03-31) 제출을 마지막으로 신규 13F를 올리지 않고 있으며, 핵심 포트폴리오 전체가 신설 상장 지주회사 CIK 0002026053으로 통합 신고된다. 향후 분기에도 반드시 0002026053을 최신 CIK로 우선 조회할 것.
 
 2. **헤지펀드 & 글로벌 매크로 대가**
    - **Duquesne Family Office (CIK: 0001536411)** - 스탠리 드라켄밀러 (Stanley Druckenmiller)
@@ -39,6 +39,9 @@ Description: 워런 버핏, 스탠리 드라켄밀러, 조지 소로스 등 글�
 4. **테크 & 테마/성장주 대가**
    - **ARK Investment Management (CIK: 0001697748)** - 캐시 우드 (Cathie Wood)
    - **Coatue Management (CIK: 0001166559)** - 필립 라퐁트 (Philippe Laffont)
+
+5. **AI 테마 특화 헤지펀드**
+   - **Situational Awareness LP (CIK: 0002045724)** - 레오폴드 아셴브레너 (Leopold Aschenbrenner). 前 OpenAI 연구원, AI 타임라인 에세이 「Situational Awareness」 저자가 2024년 설립한 AI 인프라 특화 헤지펀드. 반도체 숏(풋옵션)과 AI 데이터센터/전력 인프라 롱을 병행하는 독특한 포지셔닝이 특징이며, 분기별 전략 전환 폭이 매우 커 추적 가치가 높음.
 
 ---
 
