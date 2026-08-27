@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:biz.heraldcorp.com)",
+      "WebFetch(domain:www.businesskorea.co.kr)",
+      "WebFetch(domain:www.mediawatch.kr)"
+    ]
+  }
+}
