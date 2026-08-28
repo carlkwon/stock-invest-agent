@@ -4,9 +4,25 @@ description:
 
 # KOSPI & KOSDAQ Market Capitalization & Liquidity Flow Analysis
 
+## Global Context
+| Variable | Description | Example / Default |
+|----------|-------------|-------------------|
+| `{{TARGET_TIME}}` | 분석 기준일이 속한 월 (파일명 활용) | `2026_08` |
+| `{{WRITE_DATE}}` | 리포트 실제 생성일(파일 실행 시점의 오늘 날짜, YYYYMMDD) | `20260828` |
+| `{{OUTPUT_DIR}}` | 리포트 저장 기본 디렉토리 경로 | `reports/market_cap_flow/` |
+
 > **분석 기준일:** {{ANALYSIS_DATE}} (비교 주기: {{ANALYSIS_PERIOD}})  
 > **리포트 생성 일시:** {{GENERATED_AT}}  
 > **분석 대상 시장:** {{MARKET_SCOPE}} (KOSPI / KOSDAQ)
+
+## Data Retrieval 우선순위
+
+1. **[우선순위 1] KRX Open API 직접 조회 (권장):** `.env`에 `KRX_OPENAPI_SECRET_KEY`가 설정되어 있으면 `src/data/krx_openapi_provider.py`를 사용해 시가총액·지수·순위 데이터를 공식 실측값으로 확보하세요.
+   - `get_kospi_index_daily(base_date)` / `get_kosdaq_index_daily(base_date)` — 지수 종가·등락률·**시장 전체 시가총액**(`MKTCAP` 컬럼, `IDX_NM`이 "코스피"/"코스닥"인 행)
+   - `get_kospi_daily_trade(base_date)` / `get_kosdaq_daily_trade(base_date)` — 전 종목 시가총액(`MKTCAP`)·종가·등락률 → `MKTCAP` 내림차순 정렬로 정확한 시총 순위 산출 (Section 3 Top 20 대형주 동향의 근거 데이터)
+   - `base_date`는 `YYYYMMDD` 형식이며, 비교 기준일(직전 조사 시점)과 분석 기준일 양쪽을 모두 조회해 순위 변동(rank change)·시총 변동률을 직접 계산하세요.
+   - 지수 등락률(%)과 실제 시가총액 변동률(%)은 자사주 매입/소각·유상증자 등으로 서로 다를 수 있으므로, 반드시 실측 `MKTCAP` 값으로 계산하고 지수 등락률로 근사하지 마세요.
+2. **[우선순위 2] `/browser` 폴백:** KRX Open API 승인 목록에 없는 데이터(투자자별 거래실적 — 외국인/기관/개인 순매수, 업종별 시가총액 집계, 개별 이벤트/촉매 배경)는 언론 마감시황 기사로 교차검증하세요.
 
 ---
 
@@ -131,8 +147,9 @@ description:
 
 ## 7. Appendix: Data Source & Methodology (데이터 출처 및 산출 공식)
 
-- **Data Sources (데이터 출처):** KRX 정보데이터시스템 Open API, Open DART
+- **Data Sources (데이터 출처):** KRX 정보데이터시스템 Open API(`src/data/krx_openapi_provider.py`, 시가총액·지수·종목시세 1차 출처), Open DART, 언론 보도(투자자별 수급·이벤트 배경 보완용)
 - **Key Formulas (핵심 산출식):**
   - `Sector Market Share (%) = (섹터 총 시가총액 / 시장 전체 시가총액) * 100`
   - `Smart Money Ratio (%) = (외국인+기관 순매수 대금 / 해당 종목 시가총액) * 100`
-- **Output Directory (결과 저장 경로):** `{{OUTPUT_PATH}}`
+  - `시가총액 변동률(%) = (분석기준일 MKTCAP - 비교기준일 MKTCAP) / 비교기준일 MKTCAP * 100` (KRX Open API 실측값 사용, 지수 등락률로 근사하지 않음)
+- **Output Directory (결과 저장 경로):** `{{OUTPUT_DIR}}kospi_kosdaq_flow_report_{{TARGET_TIME}}_{{WRITE_DATE}}.md`

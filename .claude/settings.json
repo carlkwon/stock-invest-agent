@@ -3,7 +3,11 @@
     "allow": [
       "WebFetch(domain:biz.heraldcorp.com)",
       "WebFetch(domain:www.businesskorea.co.kr)",
-      "WebFetch(domain:www.mediawatch.kr)"
+      "WebFetch(domain:www.mediawatch.kr)",
+      "Bash('c:\\\\Users\\\\권기달\\\\MyProject\\\\stock-invest-agent\\\\.venv\\\\Scripts\\\\python.exe' -c ' *)",
+      "Bash(../.venv/Scripts/python.exe -c ' *)",
+      "WebFetch(domain:ket.kr)",
+      "Bash(git add *)"
     ]
   }
 }
