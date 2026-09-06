@@ -19,7 +19,7 @@ description:
 
 1. **[우선순위 1] KRX Open API 직접 조회 (권장):** `.env`에 `KRX_OPENAPI_SECRET_KEY`가 설정되어 있으면 `src/data/krx_openapi_provider.py`를 사용해 시가총액·지수·순위 데이터를 공식 실측값으로 확보하세요.
    - `get_kospi_index_daily(base_date)` / `get_kosdaq_index_daily(base_date)` — 지수 종가·등락률·**시장 전체 시가총액**(`MKTCAP` 컬럼, `IDX_NM`이 "코스피"/"코스닥"인 행)
-   - `get_kospi_daily_trade(base_date)` / `get_kosdaq_daily_trade(base_date)` — 전 종목 시가총액(`MKTCAP`)·종가·등락률 → `MKTCAP` 내림차순 정렬로 정확한 시총 순위 산출 (Section 3 Top 20 대형주 동향의 근거 데이터)
+   - `get_kospi_daily_trade(base_date)` / `get_kosdaq_daily_trade(base_date)` — 전 종목 시가총액(`MKTCAP`)·종가·등락률 → `MKTCAP` 내림차순 정렬로 KOSPI 및 KOSDAQ 각각 상위 20위(Top 20)까지 정확한 시총 순위 산출 (Section 3 KOSPI Top 20 & KOSDAQ Top 20 대형주 동향의 근거 데이터)
    - `base_date`는 `YYYYMMDD` 형식이며, 비교 기준일(직전 조사 시점)과 분석 기준일 양쪽을 모두 조회해 순위 변동(rank change)·시총 변동률을 직접 계산하세요.
    - 지수 등락률(%)과 실제 시가총액 변동률(%)은 자사주 매입/소각·유상증자 등으로 서로 다를 수 있으므로, 반드시 실측 `MKTCAP` 값으로 계산하고 지수 등락률로 근사하지 마세요.
 2. **[우선순위 2] `/browser` 폴백:** KRX Open API 승인 목록에 없는 데이터(투자자별 거래실적 — 외국인/기관/개인 순매수, 업종별 시가총액 집계, 개별 이벤트/촉매 배경)는 언론 마감시황 기사로 교차검증하세요.
@@ -55,21 +55,29 @@ description:
 
 ---
 
-## 3. Top 20 Market Cap Dynamics & Megacap Shift (시총 Top 20 대형주 동향)
+## 3. Top 20 Market Cap Dynamics & Megacap Shift (KOSPI & KOSDAQ 시총 Top 20 대형주 동향)
 
-### 3.1 Notable Market Cap Gainers & Losers in Top 20 (Top 20 주요 시총 변동 종목)
+### 3.1 KOSPI 시총 Top 20 (20위까지 분석)
 
 | Rank Change (순위 변동) | Ticker / Company (종목명 / 티커) | Market (시장) | Current Market Cap (현재 시총) | Period Cap Change (시총 변동률 %) | Foreign Net Buy (외인 순매수) | Inst. Net Buy (기관 순매수) | Key Catalyst / Remarks (주요 변동 사유 및 비고) |
 |:---:|:---|:---:|:---:|:---:|:---:|:---:|:---|
-| **1 (`0`)** | **{{TOP20_STOCK_1_NAME}}** (`{{TOP20_STOCK_1_TICKER}}`) | {{MKT_1}} | {{MCAP_1}} | `+{{CHANGE_1}}%` | {{FOR_1}} | {{INST_1}} | {{NOTE_1}} |
-| **2 (`+1`)** | **{{TOP20_STOCK_2_NAME}}** (`{{TOP20_STOCK_2_TICKER}}`) | {{MKT_2}} | {{MCAP_2}} | `+{{CHANGE_2}}%` | {{FOR_2}} | {{INST_2}} | {{NOTE_2}} |
-| **3 (`-1`)** | **{{TOP20_STOCK_3_NAME}}** (`{{TOP20_STOCK_3_TICKER}}`) | {{MKT_3}} | {{MCAP_3}} | `-{{CHANGE_3}}%` | {{FOR_3}} | {{INST_3}} | {{NOTE_3}} |
+| **1 (`0`)** | **{{KOSPI_STOCK_1_NAME}}** (`{{KOSPI_STOCK_1_TICKER}}`) | KOSPI | {{KOSPI_MCAP_1}} | `+{{KOSPI_CHANGE_1}}%` | {{KOSPI_FOR_1}} | {{KOSPI_INST_1}} | {{KOSPI_NOTE_1}} |
+| **2 (`+1`)** | **{{KOSPI_STOCK_2_NAME}}** (`{{KOSPI_STOCK_2_TICKER}}`) | KOSPI | {{KOSPI_MCAP_2}} | `+{{KOSPI_CHANGE_2}}%` | {{KOSPI_FOR_2}} | {{KOSPI_INST_2}} | {{KOSPI_NOTE_2}} |
 | ... | ... | ... | ... | ... | ... | ... | ... |
-| **20 (`+3`)** | **{{TOP20_STOCK_20_NAME}}** (`{{TOP20_STOCK_20_TICKER}}`) | {{MKT_20}} | {{MCAP_20}} | `+{{CHANGE_20}}%` | {{FOR_20}} | {{INST_20}} | {{NOTE_20}} |
+| **20 (`+3`)** | **{{KOSPI_STOCK_20_NAME}}** (`{{KOSPI_STOCK_20_TICKER}}`) | KOSPI | {{KOSPI_MCAP_20}} | `+{{KOSPI_CHANGE_20}}%` | {{KOSPI_FOR_20}} | {{KOSPI_INST_20}} | {{KOSPI_NOTE_20}} |
 
-### 3.2 Megacap Rank Flipping & Top 10 Entry/Exit Signals (대형주 순위 역전 및 Top 10 진출입 시그널)
+### 3.2 KOSDAQ 시총 Top 20 (20위까지 분석)
 
-- **[시그널 1] Top 10 신규 진입 종목:**
+| Rank Change (순위 변동) | Ticker / Company (종목명 / 티커) | Market (시장) | Current Market Cap (현재 시총) | Period Cap Change (시총 변동률 %) | Foreign Net Buy (외인 순매수) | Inst. Net Buy (기관 순매수) | Key Catalyst / Remarks (주요 변동 사유 및 비고) |
+|:---:|:---|:---:|:---:|:---:|:---:|:---:|:---|
+| **1 (`0`)** | **{{KOSDAQ_STOCK_1_NAME}}** (`{{KOSDAQ_STOCK_1_TICKER}}`) | KOSDAQ | {{KOSDAQ_MCAP_1}} | `+{{KOSDAQ_CHANGE_1}}%` | {{KOSDAQ_FOR_1}} | {{KOSDAQ_INST_1}} | {{KOSDAQ_NOTE_1}} |
+| **2 (`+1`)** | **{{KOSDAQ_STOCK_2_NAME}}** (`{{KOSDAQ_STOCK_2_TICKER}}`) | KOSDAQ | {{KOSDAQ_MCAP_2}} | `+{{KOSDAQ_CHANGE_2}}%` | {{KOSDAQ_FOR_2}} | {{KOSDAQ_INST_2}} | {{KOSDAQ_NOTE_2}} |
+| ... | ... | ... | ... | ... | ... | ... | ... |
+| **20 (`+1`)** | **{{KOSDAQ_STOCK_20_NAME}}** (`{{KOSDAQ_STOCK_20_TICKER}}`) | KOSDAQ | {{KOSDAQ_MCAP_20}} | `+{{KOSDAQ_CHANGE_20}}%` | {{KOSDAQ_FOR_20}} | {{KOSDAQ_INST_20}} | {{KOSDAQ_NOTE_20}} |
+
+### 3.3 Megacap Rank Flipping & Top 20 Entry/Exit Signals (대형주 순위 역전 및 Top 20 진출입 시그널)
+
+- **[시그널 1] Top 20 신규 진입 종목:**
   - **종목명:** {{ENTRY_STOCK_NAME}} (`{{ENTRY_STOCK_TICKER}}`)
   - **순위 변동:** {{OLD_RANK}}위 → **{{NEW_RANK}}위** (시가총액 증가율: `+{{ENTRY_MCAP_PCT}}%`)
   - **원인 및 분석:** {{ENTRY_ANALYSIS}}
