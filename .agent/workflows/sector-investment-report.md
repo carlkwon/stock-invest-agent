@@ -7,7 +7,7 @@ description: 섹터별 심층 투자 분석 및 핵심 기업 실적·수급 스
 | `{{TARGET_SECTOR}}` | 분석 대상 산업 섹터 | `반도체` 또는 `이차전지` |
 | `{{TARGET_TIME}}` | 분석(대상) 시점 — 실적·업황을 다루는 기준 월 (파일명 및 본문 활용) | `2026_07` |
 | `{{WRITE_DATE}}` | 리포트 실제 생성일(파일 실행 시점의 오늘 날짜, YYYYMMDD) | `20260827` |
-| `{{OUTPUT_DIR}}` | 리포트 저장 기본 디렉토리 경로 | `reports/sector/` |
+| `{{OUTPUT_DIR}}` | 리포트 저장 기본 디렉토리 경로 | `reports/sector/{{TARGET_SECTOR}}/` |
 
 ---
 
@@ -51,11 +51,12 @@ description: 섹터별 심층 투자 분석 및 핵심 기업 실적·수급 스
        - **Top-pick (대장주 최선호주):** 실적 컨센서스 우상향 & 외인/기관 수급 정배열 종목.
        - **★ Value-pick (저평가 매력주):** 하방 경직성이 확보되어 리스크가 제한적이며, 향후 밸류업(Value-up) 또는 실적 회복에 따라 업사이드가 큰 종목.
        - **Trailing Stop Loss 가이드라인:** 대장주(추세 추종, 여유로운 마진 7~10% 또는 타이트한 3~5%)와 저평가주(바닥권 지지선 이탈 시 손절, 시간 가치 리스크 관리)의 성격에 맞춰 각각 다르게 스톱로스 전략을 제언하세요.
-  3. 작성된 리포트는 다음 경로에 파일로 저장하세요:
-     - **저장 위치:** `{{OUTPUT_DIR}}{{TARGET_SECTOR}}_sector_report_{{TARGET_TIME}}_{{WRITE_DATE}}.md`
+  3. 작성된 리포트는 다음 경로 및 네이밍 규칙에 맞춰 파일로 저장하세요:
+     - **저장 위치:** `reports/sector/{{TARGET_SECTOR}}/[G]{{TARGET_SECTOR}}_sector_report_{{TARGET_TIME}}_{{WRITE_DATE}}.md`
+       *(단, 실행 모델에 따라 `[G]`는 Gemini, `[C]`는 Claude 접두사 적용)*
 
 ### Phase 4: 리포트 무결성 및 정량 데이터 검증 (Review & Output)
 * **Instructions:**
-  1. 완성된 파일(`{{OUTPUT_DIR}}{{TARGET_SECTOR}}_sector_report_{{TARGET_TIME}}_{{WRITE_DATE}}.md`)을 다시 로드하여 데이터 누락이 없는지 확인하세요.
+  1. 완성된 파일(`reports/sector/{{TARGET_SECTOR}}/[G]{{TARGET_SECTOR}}_sector_report_{{TARGET_TIME}}_{{WRITE_DATE}}.md`)을 다시 로드하여 데이터 누락이 없는지 확인하세요.
   2. 리포트 본문 및 테이블에 기재된 대장주 및 저평가주들의 핵심 팩트 데이터가 Phase 1에서 수집한 데이터와 완벽히 일치하는지 교차 검증하세요. (특히 저평가주의 PBR/PER, 배당률 수치 확인)
   3. 최종 확인 후 요약 메시지와 함께, **'대장주의 이익 피크아웃 우려 1가지'**와 **'저평가주의 밸류 트랩(가치 함정) 지속 리스크 1가지'**를 마지막 부분에 병기하여 채팅창에 반환하세요.
