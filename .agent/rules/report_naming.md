@@ -1,10 +1,16 @@
 ---
-description: 리포트 파일 생성 시 파일명에 분석 주체별 접두사([C]=Claude, [G]=GEMINI)를 붙이는 명명 규칙
+description: 리포트 파일 생성 시 파일명에 분석 주체별 접두사([C]=Claude, [G]=GEMINI)와 실제 작성일(WRITE_DATE)을 붙이는 명명 규칙
 ---
 
 # 리포트 파일명 생성 규칙 (Report Naming Rule)
 
 이 규칙은 워크플로우를 실행하여 **새로운 리포트 파일**을 생성할 때 항상 우선적으로 적용됩니다.
+
+0. **파일명에 실제 작성일(WRITE_DATE) 포함 의무:**
+   워크플로우의 `{{TARGET_DATE}}`(또는 `{{TARGET_TIME}}` 등 분석 기준 시점 변수)가 **월(YYYY_MM) 단위처럼 날짜 단위보다 굵은 granularity**를 쓰는 경우, 같은 달 안에서 리포트를 여러 번 갱신하면 파일이 서로 덮어써지거나 구분이 안 되는 문제가 생깁니다. 이를 막기 위해 파일명 끝에 **실제 파일을 생성한 날짜(`{{WRITE_DATE}}`, YYYYMMDD)를 반드시 추가**합니다.
+   - 예: `all_weather_report_2026_09.md` (X, 작성일 불명) → `all_weather_report_2026_09_20260915.md` (O)
+   - 워크플로우 문서 자체에 `{{WRITE_DATE}}` 변수가 정의돼 있지 않더라도, TARGET_DATE/TARGET_TIME이 월 단위 이하로 뭉뚱그려져 있다면 이 규칙을 우선 적용해 작성일을 붙입니다.
+   - TARGET_DATE가 이미 일(day) 단위(YYYY_MM_DD)로 구체적인 워크플로우(예: 주간/일중 리포트)는 통상 하루 한 번만 생성되므로 별도 WRITE_DATE 없이도 무방하나, 같은 날 재실행·정정본을 낼 경우에는 동일하게 WRITE_DATE를 덧붙여 구분합니다.
 
 1. **분석 주체별 접두사 부착 의무:**
    AI 에이전트가 데이터를 분석하여 새롭게 작성하는 모든 투자 가이드, 시황 분석, 거시 경제 리포트 파일은 파일명 맨 앞에 분석 주체를 나타내는 접두사를 반드시 붙여야 합니다.
@@ -12,9 +18,9 @@ description: 리포트 파일 생성 시 파일명에 분석 주체별 접두사
    - **GEMINI가 분석·작성** → `[G]`
 
 2. **적용 예시 (Claude 실행 시):**
-   - 워크플로우 산출물 경로가 `weekly_guide_2026_09_14.md`로 정의돼 있어도, 실제 파일은 `[C]weekly_guide_2026_09_14.md`로 저장합니다.
-   - `alternative_assets_report_2026_10.md` → `[C]alternative_assets_report_2026_10.md`
-   - `macro_economic_report_2026_09.md` → `[C]macro_economic_report_2026_09.md`
+   - 워크플로우 산출물 경로가 `weekly_guide_2026_09_14.md`로 정의돼 있어도(TARGET_DATE가 이미 일 단위), 실제 파일은 `[C]weekly_guide_2026_09_14.md`로 저장합니다.
+   - `alternative_assets_report_2026_10.md`(TARGET_DATE가 월 단위) → 규칙 0에 따라 작성일을 추가해 `[C]alternative_assets_report_2026_10_20261005.md`로 저장합니다.
+   - `macro_economic_report_2026_09_3주차.md` → `[C]macro_economic_report_2026_09_3주차_20260918.md`(워크플로우 자체 `{{WRITE_DATE}}` 변수 사용)
 
 3. **예외 사항 (기존 파일 편집 시):**
    - 이 규칙은 **새로 생성되는 파일**에만 적용됩니다.

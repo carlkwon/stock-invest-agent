@@ -10,6 +10,7 @@ description: 금·원자재·비트코인 등 대체 자산 투자 시그널 점
 | Variable | Description | Example / Default |
 |----------|-------------|-------------------|
 | `{{TARGET_DATE}}` | 리포트 작성/분석 기준 시점 (파일명 및 본문 활용) | `2026_08` |
+| `{{WRITE_DATE}}` | 리포트 실제 생성일(파일 실행 시점의 오늘 날짜, YYYYMMDD) — `.agent/rules/report_naming.md` 규칙 0에 따라 TARGET_DATE가 월 단위이므로 필수 | `20260915` |
 | `{{OUTPUT_DIR}}` | 리포트 저장 기본 디렉토리 경로 | `reports/alternative_assets/` |
 
 ---
@@ -96,10 +97,10 @@ description: 금·원자재·비트코인 등 대체 자산 투자 시그널 점
      - **리스크 요인 및 모니터링 체크리스트:** 규제 변화, 금리 정책 전환, 지정학적 리스크 등 시나리오가 바뀔 경우 재검토할 조건
   2. 결론은 "현재 3분기 금리 인하 기대가 확대되고 있어 비트코인 비중을 5%p 확대하고, 금은 기존 비중을 유지한다"와 같이 투자자가 즉시 실행할 수 있는 **'Actionable(실행 가능한) 결정'**을 명시해야 합니다.
   3. 작성된 리포트는 다음 경로에 파일로 저장하세요.
-     - **저장 위치:** `{{OUTPUT_DIR}}alternative_assets_report_{{TARGET_DATE}}.md`
+     - **저장 위치:** `{{OUTPUT_DIR}}alternative_assets_report_{{TARGET_DATE}}_{{WRITE_DATE}}.md`
 
 ## Step 6. 최종 검증 및 저장 확인 (Review & Verification)
 * **Instructions:**
-  1. 완성된 파일(`{{OUTPUT_DIR}}alternative_assets_report_{{TARGET_DATE}}.md`)을 다시 읽어와 인용된 수치(금 시세, 실질 금리, BTC 가격 등)와 시그널 판정 근거가 서로 모순되지 않는지, 출처가 최신인지 검증하세요.
+  1. 완성된 파일(`{{OUTPUT_DIR}}alternative_assets_report_{{TARGET_DATE}}_{{WRITE_DATE}}.md`)을 다시 읽어와 인용된 수치(금 시세, 실질 금리, BTC 가격 등)와 시그널 판정 근거가 서로 모순되지 않는지, 출처가 최신인지 검증하세요.
   2. 마크다운 표·강조 서식이 가독성 있게 적용됐는지 확인하고, "데이터 미확보"로 표기된 항목이 결론의 신뢰도에 영향을 주지 않는지 점검하세요.
   3. 검증 완료 후, 생성된 파일 경로와 함께 이번 리포트의 핵심 자산 배분 결정 한 줄을 요약하여 결론 다음에 추가하고 사용자에게 반환하세요.

@@ -10,6 +10,7 @@ description: 레이 달리오 올웨더(Risk Parity) 포트폴리오 매크로 �
 | Variable | Description | Example / Default |
 |----------|-------------|-------------------|
 | `{{TARGET_DATE}}` | 리포트 작성/분석 기준 시점 (파일명 및 본문 활용) | `2026_08` |
+| `{{WRITE_DATE}}` | 리포트 실제 생성일(파일 실행 시점의 오늘 날짜, YYYYMMDD) — `.agent/rules/report_naming.md` 규칙 0에 따라 TARGET_DATE가 월 단위이므로 필수 | `20260915` |
 | `{{OUTPUT_DIR}}` | 리포트 저장 기본 디렉토리 경로 | `reports/all_weather/` |
 
 ---
@@ -51,10 +52,10 @@ Step 1~4의 분석 결과를 종합하여 월간/분기별 투자 결정 리포�
      - **Risk Management:** MDD 모니터링 결과 및 Trailing Stop Loss 발동 여부·기준선
   2. 결론은 "성장 둔화·물가 재상승 국면 진입 신호가 뚜렷하므로 장기채 비중을 40%→45%로 늘리고 주식 비중을 30%→25%로 축소한다"와 같이 투자자가 즉시 실행할 수 있는 **'Actionable(실행 가능한) 리밸런싱 지시'**를 명시해야 합니다.
   3. 작성된 리포트는 다음 경로에 파일로 저장하세요.
-     - **저장 위치:** `{{OUTPUT_DIR}}all_weather_report_{{TARGET_DATE}}.md`
+     - **저장 위치:** `{{OUTPUT_DIR}}all_weather_report_{{TARGET_DATE}}_{{WRITE_DATE}}.md`
 
 ## Step 6. 최종 검증 및 저장 확인 (Review & Verification)
 * **Instructions:**
-  1. 완성된 파일(`{{OUTPUT_DIR}}all_weather_report_{{TARGET_DATE}}.md`)을 다시 읽어와 인용된 수치(자산 비중 합계 100% 여부, 이동평균선·MDD·수익률)가 서로 모순되지 않는지, 출처가 최신인지 검증하세요.
+  1. 완성된 파일(`{{OUTPUT_DIR}}all_weather_report_{{TARGET_DATE}}_{{WRITE_DATE}}.md`)을 다시 읽어와 인용된 수치(자산 비중 합계 100% 여부, 이동평균선·MDD·수익률)가 서로 모순되지 않는지, 출처가 최신인지 검증하세요.
   2. 목표 비중(30/40/15/7.5/7.5) 대비 밴드 리밸런싱 기준(±5%)이 실제 Action Items 산출 로직과 일치하는지 재확인하세요.
   3. 검증 완료 후, 생성된 파일 경로와 함께 이번 리밸런싱의 핵심 액션 한 줄을 요약하여 결론 다음에 추가하고 사용자에게 반환하세요.
