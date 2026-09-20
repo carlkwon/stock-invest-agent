@@ -22,6 +22,7 @@ description: 거시경제지표 종합 분석 및 주식 투자 전략 리포트
 ### Phase 1: 4대 핵심 거시지표 및 시장 데이터 수집 (Data Retrieval)
 * **Instructions:**
   1. **[우선순위 1] 한국은행 ECOS Open API 직접 조회:** `.env`에 `ECOS_OPENAPI_KEY`가 설정되어 있으면 `src/data/ecos_provider.py`를 통해 기준금리(`get_base_rate`), 원/달러 환율(`get_usd_krw_rate`), 100대 주요지표(`get_key_statistics`) 등을 먼저 조회하세요. 이 방식은 공식 1차 출처 수치이므로 뉴스 기사 인용보다 우선한다. 특정 통계표코드가 필요하면 ECOS Open API 포털(ecos.bok.or.kr/api)에서 코드를 확인 후 `get_statistic_search`로 범용 조회하세요.
+  1-1. **[병행] FRED API 조회(글로벌 컨텍스트):** `.env`의 `FRED_API_KEY`로 `src/data/fred_provider.py`를 호출해 미국 금리(`us2y`/`us10y`/`t10y2y`)·M2(`m2`)·연준 자산(`fed_assets`)·TGA/RRP·달러 지수(`dxy_broad`)·VIX·WTI 등 한국 시장에 영향을 주는 글로벌 지표를 확보하고 한국 지표와 함께 해석한다. 한국 M2는 FRED 시리즈가 중단돼 있으므로 ECOS를 쓴다. 일간 시리즈는 1~2영업일 지연되니 관측일을 확인하고, API 키 값은 출력·리포트에 노출하지 않는다.
   2. **[우선순위 2] `/browser` 폴백:** ECOS API로 확보하지 못한 지표(고용률, 경기선행지수, 뉴스심리지수, 고객예탁금, 신용융자 잔고 등 ECOS 미제공 항목)는 `/browser` 명령어로 한국은행(BOK), 통계청, 금융투자협회 등의 최신 발표 자료를 검색하세요.
   3. `{{TARGET_WEEK_LABEL}}`(해당 주) 시점 기준으로 **4대 거시 지표**와 **주식시장 연계 데이터**를 확보하세요:
      - **성장 & 물가:** 실질 GDP 성장률, 소비자물가지수(CPI) 및 근원물가 추이 — 월간/분기 발표 지표이므로, 이번 주에 새 발표가 없었다면 직전 리포트 값을 그대로 유지하고 본문에 "변동 없음(직전 발표치 유지)"로 표시하세요. 억지로 매주 새 숫자를 찾으려 하지 마세요.

@@ -23,6 +23,7 @@ description: 미국 거시경제지표 종합 분석 및 자산 투자 전략 �
 
 ### Phase 1: 미국 핵심 거시지표 및 시장 데이터 수집 (Data Retrieval)
 * **Instructions:**
+  0. **[최우선] FRED API 직접 조회:** `.env`의 `FRED_API_KEY`로 `src/data/fred_provider.py`(`SERIES` 딕셔너리에 M2·연준 자산·TGA·RRP·국채금리·CPI·PCE·고용·실업수당·GDP·VIX·환율 등 시리즈 ID 정리)를 먼저 호출해 수치를 확보한다. `get_latest(series_id, n=2)`로 최신 2개 관측치를 받아 WoW/MoM을 계산한다. 일간 시리즈는 1~2영업일 지연되고 일부 지표(미시간대 심리 등)는 갱신이 늦으므로, FRED 관측일이 기준일보다 오래되면 아래 웹 검색으로 보완하고 어느 값이 FRED 기준인지 본문/데이터 한계에 구분해 적는다. API 키 값은 출력·리포트에 절대 노출하지 않는다.
   1. **[우선순위 1] 공식 1차 출처:** 웹 검색(WebSearch/WebFetch)으로 아래 기관의 공식 발표를 먼저 확인한다. 뉴스 기사 인용보다 우선한다.
      - BEA(GDP, PCE), BLS(고용·CPI·PPI), Federal Reserve(FOMC 성명·점도표·의사록), Conference Board(LEI·소비자신뢰), University of Michigan(소비자심리), FINRA(신용융자잔고), CBOE(VIX), U.S. Treasury(국채금리)
   2. **[우선순위 2] 시장 데이터 보조 소스:** CNBC, Yahoo Finance, Bloomberg, Trading Economics 등에서 지수·금리·유가 종가를 확인한다. 공식 사이트가 403 등으로 막히면 다른 소스로 교차 확인하되, **접근하지 못한 원문은 "데이터 한계"에 명시**한다.
