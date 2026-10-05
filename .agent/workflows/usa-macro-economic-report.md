@@ -13,8 +13,8 @@ description: 미국 거시경제지표 종합 분석 및 자산 투자 전략 �
 | `{{RUN_DATE}}` | 워크플로우 실행일, YYYY-MM-DD | `2026-09-19` |
 | `{{TARGET_WEEK_LABEL}}` | 분석 기준 주차 — `{{YYYY}}_{{MM}}_{{N}}주차` 형식. 주차 계산: `N = ceil(일/7)` (예: 9/19 → ceil(19/7)=3 → `2026_09_3주차`) | `2026_09_3주차` |
 | `{{WRITE_DATE}}` | 리포트 실제 생성일(YYYYMMDD) | `20260919` |
-| `{{OUTPUT_DIR}}` | 리포트 저장 기본 디렉토리 | `reports/macro/` |
-| `{{PREV_REPORT_PATH}}` | 직전 주 미국 리포트 경로(WoW 비교 기준) — `{{OUTPUT_DIR}}` 내 가장 최근 `*usa_macro_economic_report_*.md`를 탐색(`[C]`/`[G]` 접두사 무관, 작성일이 가장 늦은 파일) | `reports/macro/[G]usa_macro_economic_report_2026_09_2주차_20260914.md` |
+| `{{OUTPUT_DIR}}` | 리포트 저장 기본 디렉토리 | `reports/macro-usa/` |
+| `{{PREV_REPORT_PATH}}` | 직전 주 미국 리포트 경로(WoW 비교 기준) — `{{OUTPUT_DIR}}` 내 가장 최근 `*usa_macro_economic_report_*.md`를 탐색(`[C]`/`[G]` 접두사 무관, 작성일이 가장 늦은 파일) | `reports/macro-usa/[G]usa_macro_economic_report_2026_09_2주차_20260914.md` |
 | `{{WEEK_WINDOW}}` | 분석 대상 기간(직전 주 종가일 ~ 이번 주 종가일) | `9/11(금) 종가 ~ 9/18(금) 종가` |
 
 ---
@@ -65,7 +65,7 @@ description: 미국 거시경제지표 종합 분석 및 자산 투자 전략 �
      - **데이터 한계:** 확보하지 못한 지표, 소스 간 불일치, 원문 접근 실패 항목을 구체적으로 명시
      - **출처 각주:** 사용한 기관·언론과 "데이터 한계 항목은 미확보"라는 문구, 투자 책임 고지
   2. **저장 위치:** `{{OUTPUT_DIR}}usa_macro_economic_report_{{TARGET_WEEK_LABEL}}_{{WRITE_DATE}}.md`
-  3. **파일명 접두사:** `.agent/rules/report_naming.md`에 따라 실제 저장 시 파일명 맨 앞에 분석 주체 접두사(`[C]`=Claude, `[G]`=GEMINI)를 붙인다. 예: `reports/macro/[C]usa_macro_economic_report_2026_09_3주차_20260919.md`
+  3. **파일명 접두사:** `.agent/rules/report_naming.md`에 따라 실제 저장 시 파일명 맨 앞에 분석 주체 접두사(`[C]`=Claude, `[G]`=GEMINI)를 붙인다. 예: `reports/macro-usa/[C]usa_macro_economic_report_2026_09_3주차_20260919.md`
 
 ### Phase 4: 리포트 무결성 및 투자 관점 검증 (Review & Validation)
 * **Instructions:**

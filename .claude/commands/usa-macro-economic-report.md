@@ -8,6 +8,6 @@ argument-hint: []
 전달된 인자: $ARGUMENTS (보통 필요 없음)
 
 - `{{RUN_DATE}}`는 오늘 날짜, `{{TARGET_WEEK_LABEL}}`은 워크플로우 문서의 계산식(`N = ceil(일/7)`)대로 자동 산출하세요.
-- `{{PREV_REPORT_PATH}}`는 `reports/macro/` 디렉토리에서 가장 최근 `*usa_macro_economic_report_*.md`를 탐색해 확인하세요(`[C]`/`[G]` 접두사 무관).
+- `{{PREV_REPORT_PATH}}`는 `reports/macro-usa/` 디렉토리에서 가장 최근 `*usa_macro_economic_report_*.md`를 탐색해 확인하세요(`[C]`/`[G]` 접두사 무관).
 - 파일 저장 시 `.agent/rules/report_naming.md`의 접두사·WRITE_DATE 규칙을 따르세요.
 - 나머지는 워크플로우 문서의 Global Context와 Workflow Phases를 그대로 따르세요.

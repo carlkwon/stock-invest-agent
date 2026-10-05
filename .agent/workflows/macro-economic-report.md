@@ -12,8 +12,8 @@ description: 거시경제지표 종합 분석 및 주식 투자 전략 리포트
 | `{{RUN_DATE}}` | 워크플로우 실행일, YYYY-MM-DD | `2026-08-28` |
 | `{{TARGET_WEEK_LABEL}}` | 분석 기준 주차 — `{{YYYY}}_{{MM}}_{{N}}주차` 형식(파일명 및 본문 표기에 사용). 주차 계산: `N = ceil(일/7)` (예: 8/28 → 8월의 28일 → ceil(28/7)=4 → `2026_08_4주차`) | `2026_08_4주차` |
 | `{{WRITE_DATE}}` | 리포트 실제 생성일(파일 실행 시점의 오늘 날짜, YYYYMMDD) | `20260828` |
-| `{{OUTPUT_DIR}}` | 리포트 저장 기본 디렉토리 경로 | `reports/macro/` |
-| `{{PREV_REPORT_PATH}}` | 직전 주 리포트 파일 경로(존재 시, WoW 비교 기준) — `{{OUTPUT_DIR}}` 내 가장 최근 `macro_economic_report_*.md`를 탐색해 확인 | `reports/macro/macro_economic_report_2026_08_3주차_20260821.md` |
+| `{{OUTPUT_DIR}}` | 리포트 저장 기본 디렉토리 경로 | `reports/macro-kor/` |
+| `{{PREV_REPORT_PATH}}` | 직전 주 리포트 파일 경로(존재 시, WoW 비교 기준) — `{{OUTPUT_DIR}}` 내 가장 최근 `macro_economic_report_*.md`를 탐색해 확인 | `reports/macro-kor/macro_economic_report_2026_08_3주차_20260821.md` |
 
 ---
 

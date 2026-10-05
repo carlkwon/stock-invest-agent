@@ -38,7 +38,7 @@ description: 한미 주간 투자 가이드 통합 워크플로우 — 한국(KO
 | 벤치마크 지수 | KOSPI / KOSDAQ (`get_kospi_index_daily` / `get_kosdaq_index_daily`) | **S&P 500**(기본) / **나스닥 종합**(나스닥 상장 기술·성장주) — FRED `SP500` / `NASDAQCOM` (`src/data/fred_provider.py`, 1영업일 지연 시 Yahoo `^GSPC` / `^IXIC`로 보완) |
 | 휴장일 기준 | KRX 휴장일 | NYSE 휴장일(미 공휴일·조기 폐장 포함) |
 | 수급 1차 소스 | `reports/weekly_flow/`, `reports/market_cap_flow/` (외국인·기관 순매수/순매도) | 투자자별 순매수 데이터가 없으므로 **대체 지표**를 쓴다: ① `reports/13f/`(기관 보유 변화), ② `reports/analyst/`(의견·목표가 변경), ③ 상대강도(주간 수익률 vs S&P 500)·거래량 급증, ④ 한국 투자자 해외주식 순매수 상위(`reports/youtube_supe/`·예탁결제원 SEIBro). 이 중 최소 2개를 근거로 쓴다. |
-| 펀더멘털·컨센서스 | `reports/sector/`, `reports/analyst/`, 네이버 증권 컨센서스 | `reports/sector/`의 미국 기업 항목, `reports/analyst/`, `reports/macro/*usa_macro*`, Zacks·Yahoo Finance 컨센서스 |
+| 펀더멘털·컨센서스 | `reports/sector/`, `reports/analyst/`, 네이버 증권 컨센서스 | `reports/sector/`의 미국 기업 항목, `reports/analyst/`, `reports/macro-usa/*usa_macro*`, Zacks·Yahoo Finance 컨센서스 |
 | 환율 | — | 원화 환산 수익률은 **채점에 쓰지 않고 참고로만** 병기한다(FRED `DEXKOUS`, 지연 시 언론 종가). 달러 강세·약세가 원화 투자자 체감 수익을 바꾸는 폭을 리스크로 명시한다. |
 
 ## 공통 원칙 (모든 MODE 공통)
@@ -58,7 +58,7 @@ description: 한미 주간 투자 가이드 통합 워크플로우 — 한국(KO
    - **한국:** 종목별 투자자 순매수 데이터는 KRX Open API 승인 목록에 없으므로, **`reports/weekly_flow/`(주간 외국인·기관 양방향 수급)와 `reports/market_cap_flow/`(시총·수급 흐름)의 최신 리포트를 1차 소스**로 사용한다. 발간 7일 이내면 그대로 활용하고, 초과하면 `/weekly-flow`·`/market-cap-flow`를 재실행하거나 `/browser`로 일별 시황을 보완한다.
    - **미국:** 투자자별 순매수 데이터가 없으므로 「시장별 적용 기준」의 대체 지표(13F 기관 보유 변화, 애널리스트 의견·목표가 변경, S&P 500 대비 상대강도·거래량 급증, 한국 투자자 해외주식 순매수 상위) 중 **최소 2개**를 근거로 쓴다.
    - 두 시장 모두 **순매수(강세) 상위뿐 아니라 순매도(약세) 상위 종목도 함께 추출**해 매도(비중축소)·관망 후보로 쓴다. 뉴스·시총 순위 변동은 보조 근거일 뿐, 그것만으로 수급 판단을 대신하지 않는다.
-2. **펀더멘털 교차 검증**: 최근 발간된 `reports/sector/` 섹터 리포트의 Top-pick·Value-pick 여부, 최근 실적 서프라이즈/쇼크, 컨센서스 목표주가 대비 현재가 위치를 확인한다. 미국 종목은 여기에 `reports/analyst/`(한미 애널리스트 요약)와 `reports/macro/*usa_macro*`(미국 매크로)를 더한다. (**★ 주의:** 참고할 섹터 리포트가 14일 이상 경과했거나 존재하지 않으면, 먼저 `/sector-investment-report` 워크플로우를 실행해 최신 뷰를 업데이트한 뒤 종목을 선정한다. 미국 종목의 컨센서스가 14일 이상 경과했으면 `/analyst-report {TICKER}`로 갱신한다.)
+2. **펀더멘털 교차 검증**: 최근 발간된 `reports/sector/` 섹터 리포트의 Top-pick·Value-pick 여부, 최근 실적 서프라이즈/쇼크, 컨센서스 목표주가 대비 현재가 위치를 확인한다. 미국 종목은 여기에 `reports/analyst/`(한미 애널리스트 요약)와 `reports/macro-usa/*usa_macro*`(미국 매크로)를 더한다. (**★ 주의:** 참고할 섹터 리포트가 14일 이상 경과했거나 존재하지 않으면, 먼저 `/sector-investment-report` 워크플로우를 실행해 최신 뷰를 업데이트한 뒤 종목을 선정한다. 미국 종목의 컨센서스가 14일 이상 경과했으면 `/analyst-report {TICKER}`로 갱신한다.)
 3. **촉매(이벤트)는 '날짜가 있는 것'만 인정**: 다음 주 주가를 움직일 촉매는 **캘린더에 날짜가 특정되는 이벤트**(실적 발표일·학회 일정·매크로 지표 발표일·만기일 등)여야 한다. "실적 기대감", "수주 기대", "파이프라인 성과 기대"처럼 날짜 없는 정성적 기대는 촉매로 인정하지 않으며 확신도 '상'의 근거가 될 수 없다(→ Phase A2). 촉매 실현 시점이 대상 주를 넘어가면 결판 시점을 '1개월+'로 표기한다.
 4. **밸류에이션 및 과열 리스크 (정량 컷, 예외 없이 일관 적용)**:
    - **단일일 +10% 이상 급등** → 익일 신규 '매수' 추천 **금지**. '관망'으로만 편입 가능(눌림목·저항 돌파 관찰 트리거 설정).
