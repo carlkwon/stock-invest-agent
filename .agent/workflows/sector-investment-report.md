@@ -29,6 +29,8 @@ description: 섹터별 심층 투자 분석 및 핵심 기업 실적·수급 스
      - 동일 섹터 내에서 실적 대비 주가가 과도하게 눌려있는 국내 및 미국 기업 1~2개씩 선별하세요.
      - **스크리닝 기준:** 역사적 하단 수준의 PER/PBR, 동종 업계 대비 높은 시가배당률, 풍부한 현금성 자산, 혹은 적자에서 흑자로 돌아서는 턴어라운드 조짐 등.
   7. 최근 1~4주간 수급 현황 (국내: 외국인/기관 누적 순매수, 미국: 기관/헤지펀드 13F 및 ETF 유입 흐름)을 함께 수집하세요.
+     - **국내 종목 수급은 `src/data/naver_flow_provider.py`로 직접 집계하세요.** `estimate_net_buy_amount(code, dates, krx_closes)`가 종목별 외국인·기관·개인 순매수 금액(억원, 네이버 일별 순매수 수량 × KRX 확정 종가)과 일별 내역을 돌려준다. 대장주·저평가주 여러 종목은 `get_krx_closes(codes, dates)`로 종가를 한 번에 받아 넘긴다. 외국인 지분율 변화는 `get_stock_investor_trend(code)`의 `foreign_hold_ratio`로 확인한다.
+     - 네이버 trend는 최근 약 20~30거래일만 제공하므로 4주를 넘는 구간은 확보할 수 없다. 리포트에 집계 구간(시작~종료 거래일)을 명시한다.
 
 ### Phase 2: 펀더멘털 및 기술적 지표 입체 분석 (Fundamental & Technical Convergence)
 * **Instructions:**
@@ -37,6 +39,7 @@ description: 섹터별 심층 투자 분석 및 핵심 기업 실적·수급 스
      - **대장주:** 12M Forward 실적 추정치 변경에 따른 현재 주가의 밸류에이션 부담 여부 및 글로벌 Peer 대비 한국 기업의 프리미엄/디스카운트 정당성을 평가하세요.
      - **저평가주:** 장부 가치(자산) 대비 할인율이 극심한 이유(Value Trap 여부)를 점검하고, 주가를 부양할 배당 확대나 자사주 매입, 실적 바닥 통과(턴어라운드) 가능성을 중점적으로 분석하세요.
   3. **기술적 위치 평가:** 국내 및 미국 주요 종목들의 이동평균선(5/20/60/120일) 배열 상태와 볼린저 밴드(Bollinger Bands) 위치를 파악하여 기술적 과열 및 바닥(지지) 여부를 점검하세요.
+     - **계산 도구:** `src/data/technicals.py`의 `summarize_technicals(close, high)`를 쓰세요. 입력은 국내 종목이면 `naver_flow_provider.get_daily_ohlcv(code)`, 미국 종목이면 Yahoo 일봉(`query1.finance.yahoo.com/v8/finance/chart/{TICKER}`)이다. 결과의 `pct_b`(볼린저 %B), `from_high_52w_pct`(52주 고점 대비)를 기술적 위치표에 그대로 쓴다. 손절가 등 가격 기준값은 KRX 확정 종가로 정한다(네이버 일봉은 NXT 통합가).
   4. **실적 촉매(Catalyst) 발굴:** 가이던스 변화, 턴어라운드 시점, 글로벌 전방 수요 꺾임 성향 등 주가를 움직일 실적 기반 촉매를 분석하세요.
 
 ### Phase 3: 실적·수급 연계 리포트 빌드 (Report Generation)

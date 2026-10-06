@@ -22,7 +22,11 @@ description:
    - `get_kospi_daily_trade(base_date)` / `get_kosdaq_daily_trade(base_date)` — 전 종목 시가총액(`MKTCAP`)·종가·등락률 → `MKTCAP` 내림차순 정렬로 KOSPI 및 KOSDAQ 각각 상위 20위(Top 20)까지 정확한 시총 순위 산출 (Section 3 KOSPI Top 20 & KOSDAQ Top 20 대형주 동향의 근거 데이터)
    - `base_date`는 `YYYYMMDD` 형식이며, 비교 기준일(직전 조사 시점)과 분석 기준일 양쪽을 모두 조회해 순위 변동(rank change)·시총 변동률을 직접 계산하세요.
    - 지수 등락률(%)과 실제 시가총액 변동률(%)은 자사주 매입/소각·유상증자 등으로 서로 다를 수 있으므로, 반드시 실측 `MKTCAP` 값으로 계산하고 지수 등락률로 근사하지 마세요.
-2. **[우선순위 2] `/browser` 폴백:** KRX Open API 승인 목록에 없는 데이터(투자자별 거래실적 — 외국인/기관/개인 순매수, 업종별 시가총액 집계, 개별 이벤트/촉매 배경)는 언론 마감시황 기사로 교차검증하세요.
+2. **[우선순위 2] 투자자별 순매수 — `src/data/naver_flow_provider.py`:** KRX Open API 승인 목록에 없는 외국인·기관·개인 순매수는 이 모듈로 확보하세요.
+   - `get_market_investor_trend_range(market, dates)` — 시장 전체(KOSPI/KOSDAQ) 일별 순매수 금액(억원). 연기금·기타법인은 제공되지 않는다.
+   - `estimate_net_buy_amount(code, dates, krx_closes)` — 종목별 순매수 금액(억원) = Σ(네이버 일별 순매수 수량 × 해당일 **KRX 확정 종가**). Top 20 표와 Section 4의 외인/기관 순매수 근거다. 여러 종목을 집계할 때는 `get_krx_closes(codes, dates)`로 종가를 한 번에 받아 넘기세요(날짜당 KRX 2회 호출).
+   - ⚠️ 네이버 종가는 NXT 통합가라 KRX와 다를 수 있으므로 금액 환산에 쓰지 않는다. 결과의 `price_source`가 `naver`인 행(KRX 종가 미게시일)은 리포트에 `(잠정)`으로 표기한다.
+3. **[우선순위 3] `/browser` 폴백:** 업종별 시가총액 집계, 개별 이벤트/촉매 배경은 언론 마감시황 기사로 확인하세요. 투자자별 순매수도 언론 보도 수치와 **최소 1개 거래일 이상 교차검증**하고, 차이가 크면 데이터 한계에 적으세요.
 
 ---
 
@@ -155,7 +159,7 @@ description:
 
 ## 7. Appendix: Data Source & Methodology (데이터 출처 및 산출 공식)
 
-- **Data Sources (데이터 출처):** KRX 정보데이터시스템 Open API(`src/data/krx_openapi_provider.py`, 시가총액·지수·종목시세 1차 출처), Open DART, 언론 보도(투자자별 수급·이벤트 배경 보완용)
+- **Data Sources (데이터 출처):** KRX 정보데이터시스템 Open API(`src/data/krx_openapi_provider.py`, 시가총액·지수·종목시세 1차 출처), 네이버 증권 투자자 동향(`src/data/naver_flow_provider.py`, 투자자별 순매수), Open DART, 언론 보도(수급 교차검증·이벤트 배경 보완용)
 - **Key Formulas (핵심 산출식):**
   - `Sector Market Share (%) = (섹터 총 시가총액 / 시장 전체 시가총액) * 100`
   - `Smart Money Ratio (%) = (외국인+기관 순매수 대금 / 해당 종목 시가총액) * 100`
