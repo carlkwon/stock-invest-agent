@@ -8,7 +8,7 @@ description:
 | Variable | Description | Example / Default |
 |----------|-------------|-------------------|
 | `{{TARGET_TIME}}` | 분석 기준일이 속한 월 (파일명 활용) | `2026_08` |
-| `{{WRITE_DATE}}` | 리포트 실제 생성일(파일 실행 시점의 오늘 날짜, YYYYMMDD) | `20260828` |
+| `{{WRITE_DATE}}` | 리포트 실제 생성일(파일 실행 시점의 오늘 날짜, YYYYMMDD) — 회차 앵커(`entry-{{WRITE_DATE}}`)·목차 기준일 및 연간 파일 연도(`{{YYYY}}`) 산정에 사용 | `20260828` |
 | `{{OUTPUT_DIR}}` | 리포트 저장 기본 디렉토리 경로 | `reports/market_cap_flow/` |
 
 > **분석 기준일:** {{ANALYSIS_DATE}} (비교 주기: {{ANALYSIS_PERIOD}})  
@@ -164,4 +164,4 @@ description:
   - `Sector Market Share (%) = (섹터 총 시가총액 / 시장 전체 시가총액) * 100`
   - `Smart Money Ratio (%) = (외국인+기관 순매수 대금 / 해당 종목 시가총액) * 100`
   - `시가총액 변동률(%) = (분석기준일 MKTCAP - 비교기준일 MKTCAP) / 비교기준일 MKTCAP * 100` (KRX Open API 실측값 사용, 지수 등락률로 근사하지 않음)
-- **Output Directory (결과 저장 경로):** `{{OUTPUT_DIR}}kospi_kosdaq_flow_report_{{TARGET_TIME}}_{{WRITE_DATE}}.md`
+- **Output Directory (결과 저장 경로):** `{{OUTPUT_DIR}}[C]kospi_kosdaq_flow_report_{{YYYY}}.md` — **연 단위 누적 파일**(`{{YYYY}}` = 작성 연도): 해당 연도 파일이 있으면 `<!-- ENTRIES -->` 바로 아래에 이번 회차를 최신순으로 추가하고 목차 표에 한 줄 추가, 없으면 골격부터 새로 생성. Claude=`[C]`/GEMINI=`[G]` 파일 분리 (`.agent/rules/report_naming.md` 규칙 0~3). 비교 기준일(직전 조사 시점) 수치는 연간 누적 파일의 **최신 회차**(목차 첫 행 = `<!-- ENTRIES -->` 바로 아래 첫 회차)에서 확인

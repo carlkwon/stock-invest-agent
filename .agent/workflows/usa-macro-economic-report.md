@@ -14,7 +14,7 @@ description: 미국 거시경제지표 종합 분석 및 자산 투자 전략 �
 | `{{TARGET_WEEK_LABEL}}` | 분석 기준 주차 — `{{YYYY}}_{{MM}}_{{N}}주차` 형식. 주차 계산: `N = ceil(일/7)` (예: 9/19 → ceil(19/7)=3 → `2026_09_3주차`) | `2026_09_3주차` |
 | `{{WRITE_DATE}}` | 리포트 실제 생성일(YYYYMMDD) | `20260919` |
 | `{{OUTPUT_DIR}}` | 리포트 저장 기본 디렉토리 | `reports/macro-usa/` |
-| `{{PREV_REPORT_PATH}}` | 직전 주 미국 리포트 경로(WoW 비교 기준) — `{{OUTPUT_DIR}}` 내 가장 최근 `*usa_macro_economic_report_*.md`를 탐색(`[C]`/`[G]` 접두사 무관, 작성일이 가장 늦은 파일) | `reports/macro-usa/[G]usa_macro_economic_report_2026_09_2주차_20260914.md` |
+| `{{PREV_REPORT_PATH}}` | 직전 주 미국 리포트(WoW 비교 기준) — `{{OUTPUT_DIR}}` 내 `[C]`/`[G]` 연간 파일(`*usa_macro_economic_report_{{YYYY}}.md`)의 최신 회차 중 기준일이 가장 늦은 회차. 1월 첫 회차는 전년도 파일 참조 | `reports/macro-usa/[G]usa_macro_economic_report_2026.md`의 최신 회차 |
 | `{{WEEK_WINDOW}}` | 분석 대상 기간(직전 주 종가일 ~ 이번 주 종가일) | `9/11(금) 종가 ~ 9/18(금) 종가` |
 
 ---
@@ -64,12 +64,12 @@ description: 미국 거시경제지표 종합 분석 및 자산 투자 전략 �
      - **핵심 투자 시사점 한 줄**
      - **데이터 한계:** 확보하지 못한 지표, 소스 간 불일치, 원문 접근 실패 항목을 구체적으로 명시
      - **출처 각주:** 사용한 기관·언론과 "데이터 한계 항목은 미확보"라는 문구, 투자 책임 고지
-  2. **저장 위치:** `{{OUTPUT_DIR}}usa_macro_economic_report_{{TARGET_WEEK_LABEL}}_{{WRITE_DATE}}.md`
-  3. **파일명 접두사:** `.agent/rules/report_naming.md`에 따라 실제 저장 시 파일명 맨 앞에 분석 주체 접두사(`[C]`=Claude, `[G]`=GEMINI)를 붙인다. 예: `reports/macro-usa/[C]usa_macro_economic_report_2026_09_3주차_20260919.md`
+  2. **저장 위치:** `{{OUTPUT_DIR}}[C]usa_macro_economic_report_{{YYYY}}.md` — **연 단위 누적 파일**(`{{YYYY}}` = 작성 연도): 해당 연도 파일이 있으면 `<!-- ENTRIES -->` 바로 아래에 이번 회차를 최신순으로 추가하고 목차 표에 한 줄 추가, 없으면 골격부터 새로 생성. Claude=`[C]`/GEMINI=`[G]` 파일 분리 (`.agent/rules/report_naming.md` 규칙 0~3)
+  3. **파일명 접두사:** `.agent/rules/report_naming.md`에 따라 실제 저장 시 파일명 맨 앞에 분석 주체 접두사(`[C]`=Claude, `[G]`=GEMINI)를 붙인다. 예: `reports/macro-usa/[C]usa_macro_economic_report_2026.md`(GEMINI는 `[G]usa_macro_economic_report_2026.md`)
 
 ### Phase 4: 리포트 무결성 및 투자 관점 검증 (Review & Validation)
 * **Instructions:**
-  1. 완성된 파일을 다시 읽어 수치를 검증한다. **WoW 변동 계산(이번 주 - 직전 주, 지수는 % 변화)을 재검산**하고, 직전 주 수치가 `{{PREV_REPORT_PATH}}`의 수치와 일치하는지 확인한다.
+  1. 추가된 회차(연간 파일의 최신 회차)를 다시 읽어 수치를 검증한다. **WoW 변동 계산(이번 주 - 직전 주, 지수는 % 변화)을 재검산**하고, 직전 주 수치가 `{{PREV_REPORT_PATH}}`의 수치와 일치하는지 확인한다.
   2. 본문의 서술(예: "상승", "하락", "5% 돌파")이 표의 수치와 모순되지 않는지 확인한다.
   3. 결론이 애매한 리서치 나열이 아니라 **"메가캡 테크 신규 매수 자제, 금융·에너지 비중 유지, 현금 45~55%, 손절 -4~-6%"**처럼 즉시 실행 가능한 인사이트인지 확인한다.
   4. 소스 간 불일치와 미확보 항목이 "데이터 한계"에 빠짐없이 기재됐는지 확인한다.

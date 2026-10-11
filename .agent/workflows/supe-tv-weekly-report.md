@@ -45,7 +45,7 @@ description: 매주 유튜버 '슈페TV' 미국 증시 분석 영상 및 월가 
 * **Instructions:**
   1. 수집 및 분석한 내용을 바탕으로 마크다운 형식의 보고서를 작성하세요.
   2. `.agent/rules/report_naming.md` 규칙에 따라 파일명 앞에 분석 주체 접두사(`[C]`)를 붙여 저장하세요.
-     - **저장 위치:** `{{OUTPUT_DIR}}[C]supe_tv_report_{{TARGET_DATE}}.md`
+     - **저장 위치:** `{{OUTPUT_DIR}}[C]supe_tv_report_{{YYYY}}.md` — **연 단위 누적 파일**(`{{YYYY}}` = 작성 연도): 해당 연도 파일이 있으면 `<!-- ENTRIES -->` 바로 아래에 이번 회차를 최신순으로 추가하고 목차 표에 한 줄 추가, 없으면 골격부터 새로 생성. Claude=`[C]`/GEMINI=`[G]` 파일 분리 (`.agent/rules/report_naming.md` 규칙 0~3)
   3. 리포트는 다음 구조를 엄격히 준수해야 합니다:
      - **상단 메타데이터**: 작성일자, 분석 주체(`[C]`), **원본 출처 공개 동영상 URL (`https://www.youtube.com/@supe-tv/videos` 또는 특정 영상 URL)** 포함
 
@@ -61,5 +61,5 @@ description: 매주 유튜버 '슈페TV' 미국 증시 분석 영상 및 월가 
 
 ### Phase 4: 데이터 검증 및 완료 브리핑 (Review & Output)
 * **Instructions:**
-  1. 생성된 파일(`{{OUTPUT_DIR}}[C]supe_tv_report_{{TARGET_DATE}}.md`)이 정상적으로 작성되었는지 최종 검토하세요.
+  1. 추가된 회차(`{{OUTPUT_DIR}}[C]supe_tv_report_{{YYYY}}.md`의 최신 회차)이 정상적으로 작성되었는지 최종 검토하세요.
   2. 리포트 생성이 완료되면, 사용자에게 **"이번 주 슈페TV 리포트의 핵심 메시지 1가지"**와 **"월가가 바라보는 핵심 미국 종목/ETF 관전 포인트"**를 요약하여 출력하고 저장된 파일 링크를 제공하세요.

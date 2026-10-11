@@ -11,9 +11,9 @@ description: 거시경제지표 종합 분석 및 주식 투자 전략 리포트
 |----------|-------------|-------------------|
 | `{{RUN_DATE}}` | 워크플로우 실행일, YYYY-MM-DD | `2026-08-28` |
 | `{{TARGET_WEEK_LABEL}}` | 분석 기준 주차 — `{{YYYY}}_{{MM}}_{{N}}주차` 형식(파일명 및 본문 표기에 사용). 주차 계산: `N = ceil(일/7)` (예: 8/28 → 8월의 28일 → ceil(28/7)=4 → `2026_08_4주차`) | `2026_08_4주차` |
-| `{{WRITE_DATE}}` | 리포트 실제 생성일(파일 실행 시점의 오늘 날짜, YYYYMMDD) | `20260828` |
+| `{{WRITE_DATE}}` | 리포트 실제 생성일(파일 실행 시점의 오늘 날짜, YYYYMMDD) — 회차 앵커(`entry-{{WRITE_DATE}}`)·목차 기준일 및 연간 파일 연도(`{{YYYY}}`) 산정에 사용 | `20260828` |
 | `{{OUTPUT_DIR}}` | 리포트 저장 기본 디렉토리 경로 | `reports/macro-kor/` |
-| `{{PREV_REPORT_PATH}}` | 직전 주 리포트 파일 경로(존재 시, WoW 비교 기준) — `{{OUTPUT_DIR}}` 내 가장 최근 `macro_economic_report_*.md`를 탐색해 확인 | `reports/macro-kor/macro_economic_report_2026_08_3주차_20260821.md` |
+| `{{PREV_REPORT_PATH}}` | 직전 주 리포트(WoW 비교 기준) — `{{OUTPUT_DIR}}` 내 `[C]`/`[G]` 연간 파일(`*macro_economic_report_{{YYYY}}.md`)의 최신 회차 중 기준일이 가장 늦은 회차. 1월 첫 회차는 전년도 파일 참조 | `reports/macro-kor/[C]macro_economic_report_2026.md`의 최신 회차 |
 
 ---
 
@@ -57,10 +57,10 @@ description: 거시경제지표 종합 분석 및 주식 투자 전략 리포트
        - **FX & Flow Risk:** 환율 변동에 따른 외국인 수급 방향성 및 매매 전략
        - **Trailing Stop Loss 추천 밴드:** 시장 변동성(VIX 또는 VKOSPI) 및 MDD(최대 낙폭) 리스크를 고려한 보수적/공격적 자산 배분 비중 및 손절 가이드라인 제언
   3. 작성된 리포트는 다음 경로에 파일로 저장하세요:
-     - **저장 위치:** `{{OUTPUT_DIR}}macro_economic_report_{{TARGET_WEEK_LABEL}}_{{WRITE_DATE}}.md`
+     - **저장 위치:** `{{OUTPUT_DIR}}[C]macro_economic_report_{{YYYY}}.md` — **연 단위 누적 파일**(`{{YYYY}}` = 작성 연도): 해당 연도 파일이 있으면 `<!-- ENTRIES -->` 바로 아래에 이번 회차를 최신순으로 추가하고 목차 표에 한 줄 추가, 없으면 골격부터 새로 생성. Claude=`[C]`/GEMINI=`[G]` 파일 분리 (`.agent/rules/report_naming.md` 규칙 0~3)
 
 ### Phase 4: 리포트 무결성 및 투자 관점 검증 (Review & Validation)
 * **Instructions:**
-  1. 완성된 파일(`{{OUTPUT_DIR}}macro_economic_report_{{TARGET_WEEK_LABEL}}_{{WRITE_DATE}}.md`)을 다시 읽어와 수치의 정확성을 검증하세요. WoW 변동 계산(이번 주 수치 - 직전 주 수치)이 정확한지 재검산하세요.
+  1. 완성된 회차(`{{OUTPUT_DIR}}[C]macro_economic_report_{{YYYY}}.md`의 최신 회차)을 다시 읽어와 수치의 정확성을 검증하세요. WoW 변동 계산(이번 주 수치 - 직전 주 수치)이 정확한지 재검산하세요.
   2. 리포트의 결론이 애매한 리서치 나열이 아니라, **"금리 인하 지연 우려로 인해 테크주 비중을 축소하고 배당 가치주 비중을 확대해야 함"**과 같이 투자자가 즉각적으로 참고할 수 있는 **'Actionable(실행 가능한) 인사이트'**를 제공하는지 확인하세요.
   3. 검증 완료 후, 생성된 파일 경로와 함께 가장 중요한 '주식 투자 시사점 한 줄'을 요약하여 마지막 부분에 추가하고 사용자에게 반환하세요.
