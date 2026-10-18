@@ -24,6 +24,14 @@ def _to_int(value) -> int:
     return int(str(value).replace(",", "").replace("+", ""))
 
 
+def _to_ratio(value) -> float:
+    """'12.34%' 형태의 비율 문자열을 float로 변환. 네이버가 '-'나 빈 값을 주면 NaN."""
+    try:
+        return float(str(value).rstrip("%"))
+    except (TypeError, ValueError):
+        return float("nan")
+
+
 def _get_json(url: str, params: Optional[dict] = None):
     try:
         resp = requests.get(url, headers=HEADERS, params=params, timeout=10)
@@ -56,7 +64,7 @@ def get_stock_investor_trend(code: str, page_size: int = 20) -> pd.DataFrame:
             "foreign_qty": _to_int(x.get("foreignerPureBuyQuant")),
             "inst_qty": _to_int(x.get("organPureBuyQuant")),
             "indiv_qty": _to_int(x.get("individualPureBuyQuant")),
-            "foreign_hold_ratio": float(str(x.get("foreignerHoldRatio", "0")).rstrip("%") or 0),
+            "foreign_hold_ratio": _to_ratio(x.get("foreignerHoldRatio")),
         }
         for x in data
     ]
