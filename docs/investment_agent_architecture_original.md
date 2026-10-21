@@ -298,10 +298,10 @@ stock-invest-agent/
 │   │   ├── fred_provider.py              # FRED: 미국 금리·물가·고용·스프레드·VIX·DXY·환율
 │   │   ├── ecos_provider.py              # 한국은행 ECOS: 기준금리, 원/달러, 국내 주요 통계
 │   │   ├── krx_provider.py               # FinanceDataReader 기반 보조 시세 (Open API 장애 시 폴백)
-│   │   ├── company_provider.py           # DART 공시, 재무제표, 잠정실적, 이벤트 캘린더
+│   │   ├── company_provider.py           # DART 공시, 재무제표, 잠정실적, 이벤트 캘린더 (구현: dart_provider.py — 공시 목록·재무제표)
 │   │   ├── trade_provider.py             # 관세청·산업통상부 수출입 통계, 운송비용 (3.4)
 │   │   ├── smart_money_provider.py       # 13F, 의원 거래, 옵션 특이 거래, SEIBro 해외주식 순매수 (3.2)
-│   │   ├── overseas_provider.py          # 미국 시세(정규장 종가)·재무 (3.1)
+│   │   ├── overseas_provider.py          # 미국 시세(정규장 종가)·재무 (3.1) (구현: us_market_provider.py — Yahoo 시세·밸류, sec_edgar_provider.py — 공시·XBRL 재무, earnings_calendar_provider.py — Nasdaq 실적 일정)
 │   │   ├── news_provider.py              # 네이버/구글 뉴스, 검색트렌드, 종토방 수집
 │   │   ├── gsheet_provider.py            # 구글 스프레드시트 연동 (보유 자산·계좌 유형, 6.2)
 │   │   └── watchdog.py                   # 장중 경량 감시 데몬 및 패스트트랙 트리거 (8.2.1)
